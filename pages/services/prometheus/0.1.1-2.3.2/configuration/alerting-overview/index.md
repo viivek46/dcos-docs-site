@@ -8,7 +8,7 @@ featureMaturity:
 enterprise: false
 ---
 
-# Alerting with Prometheus :
+# Working with AlwaysOn SQL :
 
  Alerting with Prometheus is divided into the following parts:
 
@@ -20,89 +20,50 @@ enterprise: false
 
   4. Send notification to Slack, PagerDuty, or email
 
-## Set up and configure the Alertmanager
+## Set up and configure the AlwaysOn SQL
 
-  Prometheus fires an alert to the Alertmanager, the Alertmanager then manages those alerts, then sends out notifications via methods such as Slack, email and PagerDuty.
+  The AlwaysOn SQL configurable options are present in Configuration section for `dse` has options for setting the ports, timeout values, log location, and other Spark or Hive configuration settings.
 
-The template for Alertmanager configuration is below:
-
-```
-global:
-  # ResolveTimeout is the time after which an alert is declared resolved
-  # if it has not been updated.
-  [ resolve_timeout: <duration> | default = 5m ]
-
-  # The default SMTP From header field.
-  [ smtp_from: <tmpl_string> ]
-  # The default SMTP smarthost used for sending emails, including port number.
-  # Port number usually is 25,
-  # Example: smtp.example.org:587
-  [ smtp_smarthost: <string> ]
-  # The default hostname to identify to the SMTP server.
-  [ smtp_hello: <string> | default = "localhost" ]
-  [ smtp_auth_username: <string> ]
-  # SMTP Auth using LOGIN and PLAIN.
-  [ smtp_auth_password: <secret> ]
-  # SMTP Auth using PLAIN.
-  [ smtp_auth_identity: <string> ]
-  # SMTP Auth using CRAM-MD5.
-  [ smtp_auth_secret: <secret> ]
-  # The default SMTP TLS requirement.
-  [ smtp_require_tls: <bool> | default = true ]
-
-  # The API URL to use for Slack notifications.
-  [ slack_api_url: <string> ]
-
-  [ pagerduty_url: <string> | default = "https://events.pagerduty.com/v2/enqueue" ]
-  [ opsgenie_api_url: <string> | default = "https://api.opsgenie.com/" ]
-
-  # The default HTTP client configuration
-  [ http_config: <http_config> ]
-
-# Files from which custom notification template definitions are read.
-# The last component may use a wildcard matcher, such as 'templates/*.tmpl'.
-templates:
-  [ - <filepath> ... ]
-
-# The root node of the routing tree.
-route: <route>
-
-# A list of notification receivers.
-receivers:
-  - <receiver> ...
-
-# A list of inhibition rules.
-inhibit_rules:
-  [ - <inhibit_rule> ... ]-
-```
-
-### Configure Prometheus to talk to the Alertmanager:
-
- To initiate communication between Prometheus and Alertmanager, Alertmanager end points are added as targets to the Prometheus yml under `alerting` at the end of the following default configuration :
+The template for AlwaysOn SQL Configuration is below:
 
 ```
-global:
- scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
- evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
- # scrape_timeout is set to the global default (10s).# A scrape configuration containing exactly one endpoint to scrape:
-# Here it's Prometheus itself.
-scrape_configs:
- - job_name: 'dcos-metrics'    # All master nodes are available at master.mesos via their A record
-   dns_sd_configs:
-     - names: ['master.mesos']
-       type: 'A'
-       port: 61091    # All agent nodes are written regularly to discovery/agents.json
-   file_sd_configs:
-     - files: ['discovery/agents.json']
+# alwayson_sql_options:
+#     enabled: false
+#     thrift_port: 10000
+#     web_ui_port: 9077
+#     reserve_port_wait_time_ms: 100
+#     alwayson_sql_status_check_wait_time_ms: 500
+#     workpool: alwayson_sql
+#     log_dsefs_dir: /spark/log/alwayson_sql
+#     auth_user: alwayson_sql
+#     runner_max_errors: 10
+```
 
-rule_files:
-   # set of rule files to read alerting rules from
-   -  'rules.yml'      
+## Enabling AlwaysOn SQL
 
-alerting:
- alertmanagers:
-   - static_configs:
-     - targets: ['alertmanager.prometheus.l4lb.thisdcos.directory:9093']
+Set enabled to true in the AlwaysOn SQL options in `dse` configuration section.
+
+### Starting and stopping AlwaysOn SQL
+
+ If you have enabled AlwaysOn SQL, it will start when the cluster is started. You only need to explicitly start the server if it has been stopped, for example for a configuration change.
+ 
+ To start AlwaysOn SQL service:
+
+```
+dse client-tool alwayson-sql start
+```
+
+ To completely stop AlwaysOn SQL service:
+ 
+```
+dse client-tool alwayson-sql stop
+```
+ The server must be manually started after issuing a stop command.
+ 
+ To restart a running server:
+ 
+```
+dse client-tool alwayson-sql restart
 ```
 
 ### Create alerting rules in Prometheus
