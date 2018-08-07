@@ -35,7 +35,7 @@ NodeSync is an easy to use continuous background repair that has low overhead an
     The NodeSync service is running
 ```
 
-## Disable the NodeSync service:
+### Disable the NodeSync service:
 
 ```
 nodetool nodesyncservice disable
