@@ -12,13 +12,13 @@ enterprise: false
 
  Alerting with Prometheus is divided into the following parts:
 
-  1. Set up and configure the Alertmanager
+  1. Set up and configure the AlwaysOn SQL
 
-  2. Configure Prometheus to talk to the Alertmanager
+  2. Enabling AlwaysOn SQL
 
-  3. Create alerting rules in Prometheus
+  3. Starting and stopping AlwaysOn SQL
 
-  4. Send notification to Slack, PagerDuty, or email
+  4. Checking the status of AlwaysOn SQL
 
 ## Set up and configure the AlwaysOn SQL
 
@@ -66,89 +66,17 @@ dse client-tool alwayson-sql stop
 dse client-tool alwayson-sql restart
 ```
 
-### Create alerting rules in Prometheus
-  Alerting rules allow you to define alert conditions based on Prometheus language expressions and to send notifications about firing alerts to an external service like Slack, PagerDuty, and email.
+### Checking the status of AlwaysOn SQL
 
-The default alert rules are below. Rules files are accessed in the Prometheus configuration .yml.
-
-```
-rules:
-groups:
-- name: cpurule
- rules:
- - alert: highcpu
-   expr: cpu_total > 2
-   annotations:
-     DESCRIPTION: 'High CPU Utilization'
-     SUMMARY: 'This is to notify for high cpu utilization'
-```
-The following example checks which instance is down :
+  To find the status of AlwaysOn SQL issue a status command using dse-client-tool.
 
 ```
-alert: InstanceDown
-expr: up == 0
-for: 5m
-labels:
-  severity: page
-annotations:
-  summary: "Instance {{$labels.instance}} down"
-  description: "{{$labels.instance}} of job {{$labels.job}} has been down for more than 5 minutes."
-
+dse client-tool alwayson-sql status
 ```
-### Send notification to Slack, PagerDuty, and email
+  The returned status is one of:
 
- Alertmanager manages sending alerts to Slack, PagerDuty, and email.
+   - RUNNING: the server is running and ready to accept client requests.
+   - STOPPED_AUTO_RESTART: the server is being started but is not yet ready to accept client requests.
+   - STOPPED_MANUAL_RESTART: the server was stopped with either a stop or restart command. If the server was issued a restart          command, the status will be changed to STOPPED_AUTO_RESTART as the server starts again.
+   - STARTING: the server is actively starting up but is not yet ready to accept client requests.
 
-### Slack
-
-  To configure Slack with Alertmanager, the Alertmanager uses the Incoming Webhooks feature of Slack.
-
-  The default configuration below sends alerts to Slack to be configured under the Alertmanager configuration yml.
-
-```
-route:
-group_by: [cluster]
-receiver: webh
-group_interval: 1mreceivers:
-- name: webh
- webhook_configs:
- - url: http://webhook.marathon.l4lb.thisdcos.directory:1234
-```
-
-### PagerDuty
-To configure PagerDuty with Alertmanager :
-
-1. Create a service in PagerDuty, and obtain an integration key.
-
-2. Go to the “Services” page in PagerDuty:
-
-3. Click “+ Add New Service”:
-
-4. Note down the Integration Key:
-
-Here is a sample configuration for adding a PagerDuty setup to the Alertmanager configuration yml.
-
-```
-receivers:
-- name: team-pager
-  pagerduty_configs:
-  - service_key: $INTEGRATION_KEY
-```
-
-### Email
-  Here is a sample configuration for adding an email alert setup to the Alertmanager configuration yml.
-
-```
-GMAIL_ACCOUNT=me@example.com # Substitute your full gmail address here.
-GMAIL_AUTH_TOKEN=XXXX        # Substitute your app password
-
-receivers:
-- name: email-me
-  email_configs:
-  - to: $GMAIL_ACCOUNT
-    from: $GMAIL_ACCOUNT
-    smarthost: smtp.gmail.com:587
-    auth_username: "$GMAIL_ACCOUNT"
-    auth_identity: "$GMAIL_ACCOUNT"
-    auth_password: "$GMAIL_AUTH_TOKEN"
-```
