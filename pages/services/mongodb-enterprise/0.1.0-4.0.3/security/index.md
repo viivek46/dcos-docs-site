@@ -128,7 +128,7 @@ For TLS/SSL configuration while launching MongoDB service from catalog:
   
   3. Click 'Next' on the pop-up menu appeared for Authentication & TLS/SSL Settings.
   
-  [<img src="../img/tls_setting_screen1.png" alt="SSL Settings Screen1"/>](../img/TLS_setting_screen1.png)
+  [<img src="../img/TLS_setting_screen1.png" alt="SSL Settings Screen1"/>](../img/TLS_setting_screen1.png)
   
   _Figure 2. - Pop-up Menu For Authentication & TLS/SSL Settings
   
