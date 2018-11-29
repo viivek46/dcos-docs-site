@@ -118,6 +118,8 @@ For TLS/SSL configuration while launching MongoDB service from catalog:
   
   [<img src="../img/Ssl_enabled_config.png" alt="Configuration Enabling SSL"/>](../img/Ssl_enabled_config.png)
   
+  _Figure 1. - Enabling SSL in Configuration
+  
   After successful deployment of the service, go to **MongoDB OpsManager**. 
   
   1. In the project dashboard, select the tab `Security`.
@@ -128,13 +130,13 @@ For TLS/SSL configuration while launching MongoDB service from catalog:
   
   [<img src="../img/tls_setting_screen1.png" alt="SSL Settings Screen1"/>](../img/tls_setting_screen1.png)
   
-    _Figure 2. - Pop-up Menu For Authentication & TLS/SSL Settings
+  _Figure 2. - Pop-up Menu For Authentication & TLS/SSL Settings
   
   4. Swipe `Enable TLS/SSL` to the right i.e. 'Yes'. It will ask for TLS/SSL CA file path.
   
   [<img src="../img/tls_setting_screen2.png" alt="SSL Settings Screen2"/>](../img/tls_setting_screen2.png)
   
-    _Figure 3. - Enable TLS/SSL in Authentication & TLS/SSL Settings
+  _Figure 3. - Enable TLS/SSL in Authentication & TLS/SSL Settings
   
   5. Enter the path for the certificate that is created under the sandbox. Default path for the certification directory is `/mnt/mesos/sandbox/certs/CAs/node.ca`. Enter the path and click 'Next'.
   
@@ -142,12 +144,18 @@ For TLS/SSL configuration while launching MongoDB service from catalog:
   
   [<img src="../img/ssl_settings_screen3.png" alt="SSL Settings Screen3"/>](../img/ssl_settings_screen3.png)
   
+  _Figure 4. - Configuring PEM file path in Authentication & TLS/SSL Settings
+  
   7. Configure certificate path for OpsManager Agents. Default path for the PEM Key file is `mnt/mesos/sandbox/certs/mongodb.pem`. Enter the path and click 'Save'.
   
   [<img src="../img/ssl_settings_screen4.png" alt="SSL Settings Screen4"/>](../img/ssl_settings_screen4.png)
   
+  _Figure 5. - Configuring certificate path in Authentication & TLS/SSL Settings
+  
   8. The TLS/SSL configuration for the project is completed. You may connect to the instance using the CA File and PEM key file as provided while enabling the TLS/SSL configuration.
   
   [<img src="../img/TLS_Config_connect.png" alt="With TLS"/>](../img/TLS_Config_connect.png)
+  
+  _Figure 6. - Connect to instance using TLS/SSL security
   
   
