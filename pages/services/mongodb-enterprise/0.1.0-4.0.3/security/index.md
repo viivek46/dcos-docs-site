@@ -128,9 +128,13 @@ For TLS/SSL configuration while launching MongoDB service from catalog:
   
   [<img src="../img/tls_setting_screen1.png" alt="SSL Settings Screen1"/>](../img/tls_setting_screen1.png)
   
+    _Figure 2. - Pop-up Menu For Authentication & TLS/SSL Settings
+  
   4. Swipe `Enable TLS/SSL` to the right i.e. 'Yes'. It will ask for TLS/SSL CA file path.
   
   [<img src="../img/tls_setting_screen2.png" alt="SSL Settings Screen2"/>](../img/tls_setting_screen2.png)
+  
+    _Figure 3. - Enable TLS/SSL in Authentication & TLS/SSL Settings
   
   5. Enter the path for the certificate that is created under the sandbox. Default path for the certification directory is `/mnt/mesos/sandbox/certs/CAs/node.ca`. Enter the path and click 'Next'.
   
